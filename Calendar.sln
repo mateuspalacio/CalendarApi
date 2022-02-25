@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar", "Calendar\Calendar.csproj", "{CA3B3DEF-B75E-48F7-88C6-5E9293359C0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Domain", "Calendar.Domain\Calendar.Domain.csproj", "{095FDCA5-42F9-4288-8AF4-82AD9315CACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Data", "Calendar.Data\Calendar.Data.csproj", "{B3FB476D-0523-48D3-ADF5-2328103FE8CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA4E055F-5FFA-4390-AA23-5F4BC4965FDF}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA3B3DEF-B75E-48F7-88C6-5E9293359C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3B3DEF-B75E-48F7-88C6-5E9293359C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3B3DEF-B75E-48F7-88C6-5E9293359C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3B3DEF-B75E-48F7-88C6-5E9293359C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE055F55-E49A-4DD3-BEFC-5E8FC3E84941}
+	EndGlobalSection
+EndGlobal
