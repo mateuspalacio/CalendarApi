@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Calendar.Domain.Exceptions
 {
-    public class MissingFieldException : ErrorResponseException
+    public class NoUpcomingEventsException : ErrorResponseException
     {
-        public MissingFieldException(ErrorResponse errorResponse) : base(errorResponse)
+        public NoUpcomingEventsException(ErrorResponse errorResponse) : base(errorResponse)
         {
+
         }
     }
 }

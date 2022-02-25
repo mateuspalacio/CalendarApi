@@ -8,8 +8,10 @@ using Google.Apis.Util.Store;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Calendar.Domain.Exceptions;
 
 namespace Calendar.Domain.Services.ServicesImpl
 {
@@ -32,17 +34,18 @@ namespace Calendar.Domain.Services.ServicesImpl
                 HttpClientInitializer = _credentials.GetCredentials().Result,
                 ApplicationName = _credentials.ApplicationName,
             });
-            Event eventCreate = Mapper.Map<Event>(e);
-
             // here we check if a property is null
             var result = typeof(EventRequest).GetProperties()
-                   .Select(x => new { property = x.Name, value = x.GetValue(e) })
-                   .Where(x => x.value == null)
-                   .ToList();
+                  .Select(x => new { property = x.Name, value = x.GetValue(e) })
+                  .Where(x => x.value == null)
+                  .ToList();
             if (result.Count > 1)
-                throw new MissingFieldException($"The following properties are missing and are mandatory {string.Join(" ", result)}");
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following properties are missing and are mandatory: {string.Join(", ", result.Select(p => p.property).ToList())}", StatusCode = (int)HttpStatusCode.BadRequest });
             else if (result.Count == 1)
-                throw new MissingFieldException($"The following property is missing and is mandatory {result.First()}");
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following property is missing and is mandatory {result.First().property}", StatusCode = (int)HttpStatusCode.BadRequest });
+            Event eventCreate = Mapper.Map<Event>(e);
+
+           
             //     new Event()
             //{
             //    Summary = "Test summary",
@@ -56,12 +59,11 @@ namespace Calendar.Domain.Services.ServicesImpl
             //};
             EventsResource.InsertRequest request = service.Events.Insert(eventCreate, "primary");
 
-            // List events.
             var events = request.Execute();
             return events;
         }
 
-        public async Task<Events> GetEventsForAccount()
+        public async Task<Events> GetEventsForAccount(int? next)
         {
             // TODO: Create method to receive date and return events for said date
             // Create Google Calendar API service.
@@ -76,7 +78,10 @@ namespace Calendar.Domain.Services.ServicesImpl
             request.TimeMin = DateTime.Now;
             request.ShowDeleted = false;
             request.SingleEvents = true;
-            request.MaxResults = 10;
+            if(next is not null)
+                request.MaxResults = next.Value;
+            else
+                request.MaxResults = 10;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
             // List events.
@@ -87,9 +92,56 @@ namespace Calendar.Domain.Services.ServicesImpl
             }
             else
             {
-                Console.WriteLine("No upcoming events found.");
-                return null;
+                throw new NoUpcomingEventsException(new ErrorResponse()
+                    {
+                        Message = "No Upcoming Events for this Account",
+                        StatusCode = (int)HttpStatusCode.NotFound
+                    }
+                ); 
             }
+        }
+
+        public async Task<Events> GetEventsForAccountTimePeriod(DateTime minDateTime, DateTime maxDateTime)
+        {
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = _credentials.GetCredentials().Result,
+                ApplicationName = _credentials.ApplicationName,
+            });
+
+            // Define parameters of request.
+            EventsResource.ListRequest request = service.Events.List("primary");
+            request.TimeMin = minDateTime;
+            request.TimeMax = maxDateTime;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            // List events.
+            Events events = request.Execute();
+            if (events.Items != null && events.Items.Count > 0)
+            {
+                return events;
+            }
+            else
+            {
+                throw new NoUpcomingEventsException(new ErrorResponse()
+                {
+                    Message = "No Upcoming Events for this Account",
+                    StatusCode = (int)HttpStatusCode.NotFound
+                }
+                );
+            }
+        }
+
+        public Task<Event> UpdateEventsForAccount(string eventId, EventRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteEventsForAccount(string eventId)
+        {
+            throw new NotImplementedException();
         }
         // TODO Method to delete event or update
     }

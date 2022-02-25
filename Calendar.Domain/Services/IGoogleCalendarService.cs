@@ -10,7 +10,10 @@ namespace Calendar.Domain.Services
 {
     public interface IGoogleCalendarService
     {
-        public Task<Events> GetEventsForAccount();
+        public Task<Events> GetEventsForAccount(int? next);
+        public Task<Events> GetEventsForAccountTimePeriod(DateTime minDateTime, DateTime maxDateTime);
         public Task<Event> CreateEventsForAccount(EventRequest e);
+        public Task<Event> UpdateEventsForAccount(string eventId, EventRequest request);
+        public Task DeleteEventsForAccount(string eventId);
     }
 }

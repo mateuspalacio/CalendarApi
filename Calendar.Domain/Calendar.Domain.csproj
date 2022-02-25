@@ -22,6 +22,7 @@
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.56.0.2590" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
   </ItemGroup>
 
 </Project>

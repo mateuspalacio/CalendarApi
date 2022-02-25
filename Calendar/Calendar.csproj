@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Calendar.Data\Calendar.Data.csproj" />
     <ProjectReference Include="..\Calendar.Domain\Calendar.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Filters\" />
   </ItemGroup>
 
 </Project>
