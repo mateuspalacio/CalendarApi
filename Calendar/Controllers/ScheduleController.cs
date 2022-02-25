@@ -21,7 +21,7 @@ namespace Calendar.Controllers
             _logger = logger;
             _service = service;
         }
-        // TODO: ProducesResponseType, ExceptionHandling
+        // TODO: ProducesResponseType, ExceptionHandlingMiddleware/Codes, Put Credentials on a Vault
         [HttpGet("detailed")]
         public async Task<Events> GetEvents()
         {
@@ -40,7 +40,7 @@ namespace Calendar.Controllers
             }
             catch (Domain.Exceptions.MissingFieldException ex) {
                 responseCode = (int)HttpStatusCode.BadRequest;
-                throw ex.Message;
+                throw ex;
             }
         }
     }
