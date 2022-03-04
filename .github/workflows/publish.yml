@@ -36,4 +36,4 @@ jobs:
             aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
             aws_eb_appname: ${{secrets.AWS_EB_APPNAME}}
             aws_eb_envname: ${{secrets.AWS_EB_ENVNAME}}
-            aws_solution_stack: "64bit Amazon Linux 2 v2.2.5 running .NET Core"
+            aws_solution_stack: ${{secrets.SOLUTION_STACK}}
