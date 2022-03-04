@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Calendar.Domain.Models.DTO
 {
-    public class DateSpamRequest
+    public class DateSpanRequest
     {
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }

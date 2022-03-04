@@ -23,7 +23,6 @@ namespace Calendar.Controllers
             _logger = logger;
             _service = service;
         }
-        // TODO: CI/CD
         // CHECKIFOK = credentials on AWS
         /// <summary>
         /// Checks Google Calendar for next x events for the account. Has a default value of 10
@@ -56,7 +55,7 @@ namespace Calendar.Controllers
         [HttpGet("detailed/datePeriod")]
         [ProducesResponseType(typeof(Events), 200)]
         [ProducesResponseType(typeof(Domain.Exceptions.ErrorResponse), 404)]
-        public async Task<Events> GetEventsForDatePeriod([FromBody] DateSpamRequest dro)
+        public async Task<Events> GetEventsForDatePeriod([FromBody] DateSpanRequest dro)
         {
             var result = await _service.GetEventsForAccountTimePeriod(dro.MinDate, dro.MaxDate);
             return result;

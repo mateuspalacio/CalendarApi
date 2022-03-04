@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar", "Calendar\Calend
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar.Domain", "Calendar.Domain\Calendar.Domain.csproj", "{095FDCA5-42F9-4288-8AF4-82AD9315CACE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar.Data", "Calendar.Data\Calendar.Data.csproj", "{B3FB476D-0523-48D3-ADF5-2328103FE8CA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA4E055F-5FFA-4390-AA23-5F4BC4965FDF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -31,10 +29,6 @@ Global
 		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{095FDCA5-42F9-4288-8AF4-82AD9315CACE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3FB476D-0523-48D3-ADF5-2328103FE8CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
