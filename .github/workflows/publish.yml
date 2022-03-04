@@ -25,6 +25,7 @@ jobs:
       - name: Deploy
         run: |
             cd Calendar/
+            dotnet tool install -g Amazon.ElasticBeanstalk.Tools
             dotnet restore
             sudo apt-get update
             sudo apt-get install zip -y
