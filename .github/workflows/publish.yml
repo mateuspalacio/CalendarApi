@@ -11,12 +11,11 @@ jobs:
 
     steps:
       - name: Set up cli
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - run: pip install awsebcli --upgrade --user
+        uses: actions/setup-python@v2
+        run: pip install awsebcli --upgrade --user
 
       - name: Deploy
-      - run: |
+        run: |
             cd Calendar/
             dotnet tool restore
             apt-get update
