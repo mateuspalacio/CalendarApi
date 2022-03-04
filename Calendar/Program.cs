@@ -25,7 +25,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddSingleton<IGoogleCalendarService, GoogleCalendarService>();
 builder.Services.AddSingleton<Credentials>();
-builder.Services.AddSingleton<IConfigSettings, ConfigSettings>();
 builder.Services.AddAutoMapper(typeof(Calendar.Domain.AutoMapper).Assembly);
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
