@@ -75,11 +75,11 @@ The Controller folder contains the ScheduleController, which is the main and onl
  * *PUT `/schedule/update/{id}`* -> Updates an event for the specified account and event Id. The event must be sent through a JSON Body object, with the same format of the create method. 
  * *DELETE `/schedule/delete/{id}`* -> Delete an event for the specified account and event Id. 
 
-* Middleware
+#### Middleware
 
 This folder contains a Middleware for exception handling to better inform the users of their mistakes or what happened in a process.
 
-#### Calendar.Domain
+### Calendar.Domain
 
 Here you may find the services for the application, and also models, DTOs, Exceptions and credentials getter, alongside AutoMapper Profile.
 
