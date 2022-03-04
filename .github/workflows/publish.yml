@@ -1,0 +1,32 @@
+name: dotnet package
+
+on: [workflow_dispatch]
+
+jobs:
+ publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x' ]
+
+    steps:
+      - name: Set up cli
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install awsebcli --upgrade --user
+
+      - name: Deploy
+      - run: |
+            cd Calendar/
+            dotnet tool restore
+            apt-get update
+            apt-get install zip -y
+            dotnet eb deploy-environment --region "$aws_default_region" --aws-access-key-id "$aws_access_key_id" --aws-secret-key "$aws_secret_key" -app "$aws_eb_appname" -env "$aws_eb_envname" --solution-stack "$aws_solution_stack" --instance-profile "$aws_intance_profile"
+            with:
+                aws_default_region: ${{secrets.AWS_DEFAULT_REGION}}
+                aws_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
+                aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+                aws_eb_appname: ${{secrets.AWS_EB_APPNAME}}
+                aws_eb_envname: ${{secrets.AWS_EB_ENVNAME}}
+                aws_solution_stack: "64bit Amazon Linux 2 v2.2.5 running .NET Core"
+                aws_intance_profile: "aws-elasticbeanstalk-ec2-role"
