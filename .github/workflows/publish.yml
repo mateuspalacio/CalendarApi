@@ -37,4 +37,4 @@ jobs:
             aws_eb_appname: ${{secrets.AWS_EB_APPNAME}}
             aws_eb_envname: ${{secrets.AWS_EB_ENVNAME}}
             aws_solution_stack: "64bit Amazon Linux 2 v2.2.5 running .NET Core"
-            aws_intance_profile: "aws-elasticbeanstalk-ec2-role"
+            aws_intance_profile: "calendar-api"
