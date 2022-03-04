@@ -1,3 +1,4 @@
+using Calendar.Domain.Credentials;
 using Calendar.Domain.Models.DTO;
 using Calendar.Domain.Services;
 using Google.Apis.Auth.OAuth2;
@@ -16,13 +17,14 @@ namespace Calendar.Controllers
     {
         private readonly ILogger<ScheduleController> _logger;
         private readonly IGoogleCalendarService _service;
+
         public ScheduleController(ILogger<ScheduleController> logger, IGoogleCalendarService service)
         {
             _logger = logger;
             _service = service;
         }
-        // TODO: ProducesResponseType, Put Credentials on a Vault, CI/CD
-
+        // TODO: CI/CD
+        // CHECKIFOK = credentials on AWS
         /// <summary>
         /// Checks Google Calendar for next x events for the account. Has a default value of 10
         /// </summary>
@@ -35,6 +37,7 @@ namespace Calendar.Controllers
         [ProducesResponseType(typeof(Domain.Exceptions.ErrorResponse), 404)]
         public async Task<Events> GetEvents([FromQuery] int? next) // Maybe change to List<Event>?
         {
+
             var result = new Events();
             if (next is not null)
                   result = await _service.GetEventsForAccount(next);
@@ -97,7 +100,7 @@ namespace Calendar.Controllers
         /// <param name="eventId"></param>
         /// <response code="204">The event was deleted</response>
         /// <response code="404">Event not found</response>
-        [HttpPost("delete/{id}")]
+        [HttpDelete("delete/{eventId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(Domain.Exceptions.ErrorResponse), 404)]
         public async Task<IActionResult> RemoveEvents([FromRoute] string eventId)

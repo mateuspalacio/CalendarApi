@@ -11,16 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Credentials\client_secret_737576027566-qppvd9jjo0jt0aqbtreqa8elc2e53k06.apps.googleusercontent.com %282%29.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.2.13" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.56.0.2590" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
   </ItemGroup>

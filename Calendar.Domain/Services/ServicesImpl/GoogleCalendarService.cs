@@ -19,21 +19,23 @@ namespace Calendar.Domain.Services.ServicesImpl
     {
         private readonly Credentials.Credentials _credentials;
         public IMapper Mapper { get; }
+        private CalendarService _service;
 
         public GoogleCalendarService(Credentials.Credentials credentials, IMapper mapper)
         {
             _credentials = credentials;
             Mapper = mapper;
-        }
-        public async Task<Event> CreateEventsForAccount(EventRequest e)
-        {
-            // TODO: Figure out "Recurrence"
-            // Create Google Calendar API service.
-            var service = new CalendarService(new BaseClientService.Initializer()
+            _service = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = _credentials.GetCredentials().Result,
                 ApplicationName = _credentials.ApplicationName,
             });
+        }
+        
+
+        public async Task<Event> CreateEventsForAccount(EventRequest e)
+        {
+            // Create Google Calendar API service.
             // here we check if a property is null
             var result = typeof(EventRequest).GetProperties()
                   .Select(x => new { property = x.Name, value = x.GetValue(e) })
@@ -44,20 +46,8 @@ namespace Calendar.Domain.Services.ServicesImpl
             else if (result.Count == 1)
                 throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following property is missing and is mandatory {result.First().property}", StatusCode = (int)HttpStatusCode.BadRequest });
             Event eventCreate = Mapper.Map<Event>(e);
-
            
-            //     new Event()
-            //{
-            //    Summary = "Test summary",
-            //    Location = "Rua Paula Ney, 925, Apto 302, Fortaleza - CE",
-            //    Description = "Description for test",
-            //    Start = new EventDateTime() { DateTime = new DateTime(2022, 02, 25, 10, 30, 00), TimeZone = "America/Belem" },
-            //    End = new EventDateTime() { DateTime = new DateTime(2022, 02, 25, 11, 30, 00), TimeZone = "America/Belem" }, // get list of timezones
-            //    Recurrence = new List<string>() { "RRULE:FREQ=WEEKLY;BYDAY=FR,SA,MO;COUNT=1" },
-            //    Attendees = new List<EventAttendee>() { new EventAttendee() {Email = "mateus_palacio@atlantico.com.br"} }, // consider no email
-            //    Reminders = new Event.RemindersData() { Overrides = new List<EventReminder>() { new EventReminder() { Minutes = 10, Method = "popup" } }, UseDefault = false } // consider usedefault
-            //};
-            EventsResource.InsertRequest request = service.Events.Insert(eventCreate, "primary");
+            EventsResource.InsertRequest request = _service.Events.Insert(eventCreate, "primary");
 
             var events = request.Execute();
             return events;
@@ -65,16 +55,9 @@ namespace Calendar.Domain.Services.ServicesImpl
 
         public async Task<Events> GetEventsForAccount(int? next)
         {
-            // TODO: Create method to receive date and return events for said date
             // Create Google Calendar API service.
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = _credentials.GetCredentials().Result,
-                ApplicationName = _credentials.ApplicationName,
-            });
-
             // Define parameters of request.
-            EventsResource.ListRequest request = service.Events.List("primary");
+            EventsResource.ListRequest request = _service.Events.List("primary");
             request.TimeMin = DateTime.Now;
             request.ShowDeleted = false;
             request.SingleEvents = true;
@@ -103,14 +86,8 @@ namespace Calendar.Domain.Services.ServicesImpl
 
         public async Task<Events> GetEventsForAccountTimePeriod(DateTime minDateTime, DateTime maxDateTime)
         {
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = _credentials.GetCredentials().Result,
-                ApplicationName = _credentials.ApplicationName,
-            });
-
             // Define parameters of request.
-            EventsResource.ListRequest request = service.Events.List("primary");
+            EventsResource.ListRequest request = _service.Events.List("primary");
             request.TimeMin = minDateTime;
             request.TimeMax = maxDateTime;
             request.ShowDeleted = false;
@@ -134,15 +111,82 @@ namespace Calendar.Domain.Services.ServicesImpl
             }
         }
 
-        public Task<Event> UpdateEventsForAccount(string eventId, EventRequest request)
+        public async Task<Event> GetEventById(string eventId)
         {
-            throw new NotImplementedException();
+            EventsResource.GetRequest request = _service.Events.Get("primary", eventId);
+
+            // List event.
+            Event events = request.Execute();
+            if (events is null)
+                throw new EventNotFoundException(new ErrorResponse() { Message = $"No such event for id {eventId} on the primary calendar", StatusCode = (int)HttpStatusCode.NotFound });
+
+            return events;
+        }
+        public async Task<Event> UpdateEventsForAccount(string eventId, EventRequest request)
+        {
+            
+            // here we check if a property is null
+            var result = typeof(EventRequest).GetProperties()
+                  .Select(x => new { property = x.Name, value = x.GetValue(request) })
+                  .Where(x => x.value == null)
+                  .ToList();
+            if (result.Count > 1)
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following properties are missing and are mandatory: {string.Join(", ", result.Select(p => p.property).ToList())}", StatusCode = (int)HttpStatusCode.BadRequest });
+            else if (result.Count == 1)
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following property is missing and is mandatory {result.First().property}", StatusCode = (int)HttpStatusCode.BadRequest });
+            Event eventUpdate = Mapper.Map<Event>(request);
+            // Checking if event exists. If it doesn't, then this method will call NotFoundException
+            await GetEventById(eventId);
+
+            EventsResource.UpdateRequest req = _service.Events.Update(eventUpdate, "primary", eventId);
+
+            var events = req.Execute();
+            return events;
         }
 
         public async Task DeleteEventsForAccount(string eventId)
         {
-            throw new NotImplementedException();
+            EventsResource.GetRequest checkIfExists = _service.Events.Get("primary", eventId);
+            if (checkIfExists is null)
+                throw new EventNotFoundException(new ErrorResponse() { Message = $"No such event for id {eventId} on the primary calendar", StatusCode = (int)HttpStatusCode.NotFound });
+            EventsResource.DeleteRequest req = _service.Events.Delete("primary", eventId);
+
+            var events = req.Execute();
+            if(events != "")
+                throw new InternalErrorException(new ErrorResponse() { Message = $"Unknown Internal Error", StatusCode = (int)HttpStatusCode.InternalServerError });
         }
-        // TODO Method to delete event or update
+
+        public async Task<Events> UpdateRecurringEventsForAccount(string recurringEventId, EventRequest request)
+        {
+            var result = typeof(EventRequest).GetProperties()
+                  .Select(x => new { property = x.Name, value = x.GetValue(request) })
+                  .Where(x => x.value == null)
+                  .ToList();
+            if (result.Count > 1)
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following properties are missing and are mandatory: {string.Join(", ", result.Select(p => p.property).ToList())}", StatusCode = (int)HttpStatusCode.BadRequest });
+            else if (result.Count == 1)
+                throw new Exceptions.MissingFieldException(new ErrorResponse() { Message = $"The following property is missing and is mandatory {result.First().property}", StatusCode = (int)HttpStatusCode.BadRequest });
+            Event eventUpdate = Mapper.Map<Event>(request);
+            // Checking if event exists. If it doesn't, then this method will call NotFoundException
+            // await GetEventById(eventId);
+
+            EventsResource.InstancesRequest req = _service.Events.Instances("primary", recurringEventId);
+            var events = req.Execute();
+
+            foreach (var ev in events.Items)
+                await UpdateEventsForAccount(ev.Id, request);
+
+            req = _service.Events.Instances("primary", recurringEventId);
+            events = req.Execute();
+
+            return events;
+        }
     }
+    /* 
+     var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = _credentials.GetCredentials().Result,
+                ApplicationName = _credentials.ApplicationName,
+            });
+     */
 }

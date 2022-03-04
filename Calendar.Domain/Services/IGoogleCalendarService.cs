@@ -12,8 +12,10 @@ namespace Calendar.Domain.Services
     {
         public Task<Events> GetEventsForAccount(int? next);
         public Task<Events> GetEventsForAccountTimePeriod(DateTime minDateTime, DateTime maxDateTime);
+        public Task<Event> GetEventById(string eventId);
         public Task<Event> CreateEventsForAccount(EventRequest e);
         public Task<Event> UpdateEventsForAccount(string eventId, EventRequest request);
+        public Task<Events> UpdateRecurringEventsForAccount(string recurringEventId, EventRequest request);
         public Task DeleteEventsForAccount(string eventId);
     }
 }

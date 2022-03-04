@@ -25,13 +25,13 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddSingleton<IGoogleCalendarService, GoogleCalendarService>();
 builder.Services.AddSingleton<Credentials>();
+builder.Services.AddSingleton<IConfigSettings, ConfigSettings>();
 builder.Services.AddAutoMapper(typeof(Calendar.Domain.AutoMapper).Assembly);
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -41,6 +41,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Google Calendar API Scheduler v1");
     });
 }
+
 
 app.UseHttpsRedirection();
 
