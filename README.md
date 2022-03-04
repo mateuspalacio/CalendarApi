@@ -23,7 +23,7 @@ The main API which can be called when ran locally, or from the AWS Elastic Beans
 
 This project contains is divided into 2 folders and the root classes. The root has the appsettings.json file, which is a default to .NET, and also contains the Program.cs class to initialize the application and also for adding Dependency Injection and services.
 
-* Controller 
+#### Controller 
 
 The Controller folder contains the ScheduleController, which is the main and only Controller for the API. This controller contains 5 endpoints.
 
@@ -79,7 +79,7 @@ The Controller folder contains the ScheduleController, which is the main and onl
 
 This folder contains a Middleware for exception handling to better inform the users of their mistakes or what happened in a process.
 
-### Calendar.Domain
+#### Calendar.Domain
 
 Here you may find the services for the application, and also models, DTOs, Exceptions and credentials getter, alongside AutoMapper Profile.
 
