@@ -12,8 +12,7 @@ jobs:
     steps:
       - name: Set up cli
         uses: actions/setup-python@v2
-        run: pip install awsebcli --upgrade --user
-
+      - run: pip install awsebcli --upgrade --user
       - name: Deploy
         run: |
             cd Calendar/
