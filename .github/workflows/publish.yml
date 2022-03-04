@@ -30,11 +30,11 @@ jobs:
             sudo apt-get update
             sudo apt-get install zip -y
             dotnet eb deploy-environment --region "$aws_default_region" --aws-access-key-id "$aws_access_key_id" --aws-secret-key "$aws_secret_key" -app "$aws_eb_appname" -env "$aws_eb_envname" --solution-stack "$aws_solution_stack" --instance-profile "$aws_intance_profile"
-            with:
-                aws_default_region: ${{secrets.AWS_DEFAULT_REGION}}
-                aws_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
-                aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-                aws_eb_appname: ${{secrets.AWS_EB_APPNAME}}
-                aws_eb_envname: ${{secrets.AWS_EB_ENVNAME}}
-                aws_solution_stack: "64bit Amazon Linux 2 v2.2.5 running .NET Core"
-                aws_intance_profile: "aws-elasticbeanstalk-ec2-role"
+        env:
+            aws_default_region: ${{secrets.AWS_DEFAULT_REGION}}
+            aws_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
+            aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+            aws_eb_appname: ${{secrets.AWS_EB_APPNAME}}
+            aws_eb_envname: ${{secrets.AWS_EB_ENVNAME}}
+            aws_solution_stack: "64bit Amazon Linux 2 v2.2.5 running .NET Core"
+            aws_intance_profile: "aws-elasticbeanstalk-ec2-role"
