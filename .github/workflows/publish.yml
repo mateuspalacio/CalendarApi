@@ -1,4 +1,4 @@
-name: dotnet package
+name: Deploy
 
 on: [workflow_dispatch]
 
@@ -13,6 +13,8 @@ jobs:
       - name: Set up cli
         uses: actions/setup-python@v2
       - run: pip install awsebcli --upgrade --user
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
       - name: Deploy
         run: |
             cd Calendar/
