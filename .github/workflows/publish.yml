@@ -26,8 +26,8 @@ jobs:
         run: |
             cd Calendar/
             dotnet restore
-            apt-get update
-            apt-get install zip -y
+            sudo apt-get update
+            sudo apt-get install zip -y
             dotnet eb deploy-environment --region "$aws_default_region" --aws-access-key-id "$aws_access_key_id" --aws-secret-key "$aws_secret_key" -app "$aws_eb_appname" -env "$aws_eb_envname" --solution-stack "$aws_solution_stack" --instance-profile "$aws_intance_profile"
             with:
                 aws_default_region: ${{secrets.AWS_DEFAULT_REGION}}
